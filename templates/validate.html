@@ -1,0 +1,10 @@
+<table width="300" border="1">
+    {% for ans in final_ans %}
+    <tr>
+        <td>{{ans}}</td>
+        {% for i in final_ans[ans] %}
+        <td>{{i}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

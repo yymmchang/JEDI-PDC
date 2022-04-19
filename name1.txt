@@ -1,0 +1,15 @@
+Alice,14
+Bob,20
+Charlie,34
+David,28
+Edward,32
+Frank,6
+Gary,19
+Hank,10
+Ian,38
+James,36
+Kelvin,25
+Luke,32
+Mike,12
+Nelson,49
+Oden,38

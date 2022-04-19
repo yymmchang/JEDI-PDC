@@ -1,0 +1,15 @@
+Alice,15
+Bob,21
+Charlie,35
+Jimmy,26
+Kenny,42
+Larry,62
+Michael,52
+Nick,11
+Owen,71
+Paul,46
+Queena,22
+Rick,49
+Scott,68
+Tuker,36
+Urban,26
