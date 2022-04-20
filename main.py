@@ -1,3 +1,4 @@
+from distutils import debug
 from unicodedata import name
 from xml.dom.expatbuilder import InternalSubsetExtractor
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
@@ -70,10 +71,10 @@ def PPDImain(cname):
         tmp = filenamesss[i]
         mergegbf, mergec = gbf_merge(mergegbf, gbf[tmp], mergec, c[tmp])
     global comparec 
-    comparec = compare(mergec, c[filenamesss[-1]])  # (,bf)
+    comparec = compare(mergec, c[cname])  # (,bf)
     enc_massage = verify(mergegbf, comparec)
     dec_message = sk.decrypt(enc_massage)
-    # print(dec_message)
+    #print('dec_message::',dec_message)
     check_ans = checkans(dec_message,cname)
     return check_ans
 
@@ -107,6 +108,23 @@ def index():
 def upload_file():
     tmp = []
     filenames = []
+    global filenamesss
+    filenamesss = []
+    global files
+    files = {}
+    global ma
+    ma = {}
+    global aa
+    aa = {}
+    global gbf
+    gbf = {}
+    global c
+    c = {}
+    global mergegbf 
+    mergegbf = [0] * size
+    global mergec 
+    mergec = [0] * size
+
     if request.method == 'POST':
         uploaded_files = request.files.getlist("file[]")
         tmp = uploaded_files
@@ -131,25 +149,24 @@ def uploaded_file(filename):
 
 @app.route('/validate', methods=["POST"])
 def validate():
-    print(request.form.getlist('file'))
+    #print('validate: ',request.form.getlist('file'))
     cname = request.form.getlist('file')[0].replace('.txt', '')
     #filenamesss.remove(cname)
 
     check_ans = PPDImain(cname)
-    print(check_ans)
+    print(f'check_ans: {check_ans}')
     intersection = checkintersection()
 
     final_ans = {}
-    print(aa)
+    #print(f'aa: {aa}')
     for k in intersection: 
         tmp = []
         for i in range(len(filenamesss)):
             idx = ma[filenamesss[i]].index(k)
             tmp.append(aa[filenamesss[i]][idx])
         final_ans[k]= tmp
-    print(final_ans)
+    print(f'{final_ans}')
     return render_template('validate.html', final_ans= final_ans, filenames=filenamesss)
-    #return intersection
 
 if __name__ == '__main__':
     app.run()
