@@ -7,13 +7,13 @@ import os
 from phe import paillier
 import hashlib
 
-from GBF import gbf_gen, BF,hashs, size
+from GBF import gbf_gen, BF, hashs, size
 from PPDI import gbf_merge, compare, verify
 
 
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['txt', 'jpg'])
-UPLOAD_FOLDER = 'C:\\Users\\CISLAB\\Desktop\\web'
+ALLOWED_EXTENSIONS = set(['txt'])
+UPLOAD_FOLDER = UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
@@ -47,10 +47,10 @@ def preprocess(filename):
     aa[filename] = tmp1
     gbf1, c1 = gbf_gen(ma[filename], pk)
     gbf[filename] = gbf1
-    c[filename] = c1 
+    c[filename] = c1
 
 
-def checkans(dec_message,cname):
+def checkans(dec_message, cname):
     ans_verify = 0
     namec = cname
     for i in range(len(ma[namec])):
@@ -65,38 +65,40 @@ def checkans(dec_message,cname):
         #print('Verify result: Failed')
         return 'Verify result: Failed'
 
+
 def PPDImain(cname):
     global mergegbf, mergec
     for i in range(len(filenamesss)):
         tmp = filenamesss[i]
         mergegbf, mergec = gbf_merge(mergegbf, gbf[tmp], mergec, c[tmp])
-    global comparec 
+    global comparec
     comparec = compare(mergec, c[cname])  # (,bf)
     enc_massage = verify(mergegbf, comparec)
     dec_message = sk.decrypt(enc_massage)
-    #print('dec_message::',dec_message)
-    check_ans = checkans(dec_message,cname)
+    # print('dec_message::',dec_message)
+    check_ans = checkans(dec_message, cname)
     return check_ans
+
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+
 def checkintersection():
     intersection = []
-    for data in ma[filenamesss[0]]:     
+    for data in ma[filenamesss[0]]:
         data1 = data.encode('utf-8')
         check = 0
         for hash_func in hashs:
             idx = int(hash_func(data1).hexdigest(), 16) % size
-            if comparec[idx] ==0:
-                check+=1
+            if comparec[idx] == 0:
+                check += 1
                 break
         if check == 0:
             intersection.append(data)
     print(f'intersection: {intersection}')
     return intersection
-
 
 
 @app.route('/')
@@ -120,9 +122,9 @@ def upload_file():
     gbf = {}
     global c
     c = {}
-    global mergegbf 
+    global mergegbf
     mergegbf = [0] * size
-    global mergec 
+    global mergec
     mergec = [0] * size
 
     if request.method == 'POST':
@@ -151,7 +153,7 @@ def uploaded_file(filename):
 def validate():
     #print('validate: ',request.form.getlist('file'))
     cname = request.form.getlist('file')[0].replace('.txt', '')
-    #filenamesss.remove(cname)
+    # filenamesss.remove(cname)
 
     check_ans = PPDImain(cname)
     print(f'check_ans: {check_ans}')
@@ -159,14 +161,15 @@ def validate():
 
     final_ans = {}
     #print(f'aa: {aa}')
-    for k in intersection: 
+    for k in intersection:
         tmp = []
         for i in range(len(filenamesss)):
             idx = ma[filenamesss[i]].index(k)
             tmp.append(aa[filenamesss[i]][idx])
-        final_ans[k]= tmp
+        final_ans[k] = tmp
     print(f'{final_ans}')
-    return render_template('validate.html', final_ans= final_ans, filenames=filenamesss)
+    return render_template('validate.html', final_ans=final_ans, filenames=filenamesss)
+
 
 if __name__ == '__main__':
     app.run()
