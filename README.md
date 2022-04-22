@@ -1,5 +1,8 @@
 # PPDataIntegration
 
+how to start?
+
+
 連線網址: 127.0.0.1:5000
 
 
@@ -12,14 +15,17 @@ Upload files 選擇檔案上傳  <br />
 
 ## /upload
 Uploaded files 可檢視上傳之檔案 <br />
-下方有多個單選框，選取欲作為query之檔案  <br />
+下方有多個單選框(選項為上傳之檔案)，可選取欲作為query之檔案  <br />
 -   #file1
 -   #file2
 -   #file3
 
-**#file**  按鈕 → 可以查看file內容  <br />
-**sumbit** 按鈕 → 提交query選項  <br />
 ![image](https://user-images.githubusercontent.com/55148438/164232802-9fb197c7-7bd2-4ee3-9422-f5647d4cb03c.png)
+<br />
+**#file**  按鈕 → 可以查看file內容  <br />
+![image](https://user-images.githubusercontent.com/55148438/164390595-86fa2d8e-da4c-4cf5-955e-49c0eb6f149f.png)
+<br />
+**sumbit** 按鈕 → 提交query選項  <br />
 
 
 ## /validate
