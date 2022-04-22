@@ -1,8 +1,15 @@
 # PPDataIntegration
 
-how to start?
+
+ <br />
+透過vscode編譯器打開資料夾 <br />
+執行main.py   <br />
+
+在termial處下載相關套件:   <br />
+pip install flask   <br />
 
 
+ <br />
 連線網址: 127.0.0.1:5000
 
 
@@ -10,6 +17,9 @@ how to start?
 Upload files 選擇檔案上傳  <br />
 **選擇檔案** 按鈕 → 可以選擇多個檔案一次上傳  <br />
 **Upload**  按鈕 → 上傳檔案  <br />  
+上傳檔案限制: txt  <br />
+
+此處範例上傳4個txt檔案(分別為name1.txt, name2.txt, name3.txt, namec.txt)  <br />
 ![image](https://user-images.githubusercontent.com/55148438/164232516-e12224c1-20ad-442c-b5f4-007200b4ad67.png)
 
 
@@ -19,10 +29,11 @@ Uploaded files 可檢視上傳之檔案 <br />
 -   #file1
 -   #file2
 -   #file3
+-   #file4
 
 ![image](https://user-images.githubusercontent.com/55148438/164232802-9fb197c7-7bd2-4ee3-9422-f5647d4cb03c.png)
 <br />
-**#file**  按鈕 → 可以查看file內容  <br />
+**#file**  按鈕 → 可以查看file內容 (選項名稱同上傳之檔案名)  <br />
 ![image](https://user-images.githubusercontent.com/55148438/164390595-86fa2d8e-da4c-4cf5-955e-49c0eb6f149f.png)
 <br />
 **sumbit** 按鈕 → 提交query選項  <br />
