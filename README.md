@@ -9,7 +9,7 @@
 
 在termial處下載相關套件:   <br />
 pip install flask   <br />
-
+pip install phe   <br />
 
  <br />
 連線網址: 127.0.0.1:5000
