@@ -1,5 +1,7 @@
 # PPDataIntegration
 
+透過GBF技術達成MPSI(多方私有集合交集)的資料集整合展示網頁  <br />
+目標為整合資料集合中交集的資料項  <br />
 
  <br />
 透過vscode編譯器打開資料夾 <br />
