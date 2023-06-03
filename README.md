@@ -2,18 +2,23 @@
 
 透過GBF技術達成MPSI(多方私有集合交集)的資料集整合展示網頁  <br />
 目標為整合資料集合中交集的資料項  <br />
+Through the GBF technology to achieve MPSI (Multi-Party Private Set Intersection) dataset integration display webpage.  <br />
+The goal is to integrate the intersection data of datasets.  <br />
 
  <br />
 透過vscode編譯器打開資料夾 <br />
 執行main.py   <br />
+Open the folder through the vscode compiler.  <br />
+Compile main.py.  <br />
 
 在termial處下載相關套件:   <br />
+Download related packages at terminal:   <br />
 pip install flask   <br />
 pip install phe   <br />
 
  <br />
 連線網址: 127.0.0.1:5000
-
+Connection URL: 127.0.0.1:5000
 
 ## /
 Upload files 選擇檔案上傳  <br />
