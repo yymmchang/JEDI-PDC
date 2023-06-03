@@ -86,7 +86,7 @@ pip install phe   <br />
 Connection URL: 127.0.0.1:5000 <br />
 
 ## /
-Upload files → Select file to upload  <br />
+Upload files / Select file to upload  <br />
 **選擇檔案** button → Select multiple files to upload at once  <br />
 **Upload**  button → Upload file  <br />  
 Upload file limit: txt  <br />
@@ -96,7 +96,7 @@ Here is an example to upload 4 txt files(Respectively name1.txt, name2.txt, name
 
 
 ## /upload
-Uploaded files → View uploaded files <br />
+Uploaded files / View uploaded files <br />
 There are multiple radio buttons below (the option is the uploaded file), you can select the file to be used as a query  <br />
 -   #file1
 -   #file2
