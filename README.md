@@ -86,7 +86,7 @@ pip install phe   <br />
 Connection URL: 127.0.0.1:5000 <br />
 
 ## /
-Upload files / Select file to upload  <br />
+Upload files / Select the file to upload  <br />
 **選擇檔案** button → Select multiple files to upload at once  <br />
 **Upload**  button → Upload file  <br />  
 Upload file limit: txt  <br />
