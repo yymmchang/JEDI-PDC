@@ -88,7 +88,7 @@ Connection URL: 127.0.0.1:5000 <br />
 ## /
 Upload files / Select the file to upload  <br />
 **選擇檔案** button → Select multiple files to upload at once  <br />
-**Upload**  button → Upload file  <br />  
+**Upload**  button → Upload the file  <br />  
 Upload file limit: txt  <br />
 
 Here is an example to upload 4 txt files(Respectively name1.txt, name2.txt, name3.txt, namec.txt)  <br />
