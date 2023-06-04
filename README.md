@@ -1,8 +1,9 @@
-# PPDataIntegration
+# JEDI: Joint and Effective Privacy Preserving Outsourced Set Intersection and Data Integration Protocols
 
 
 <a href="https://github.com/cislab-ntut/PPDataIntegration/blob/master/README(Chinese).md">[Chinese ver.]</a> <br>
 
+This repository is a simple PoC to demonstrate the effectiveness of the work, a.k.a JEDI.
 
 Through the GBF technology to achieve MPSI (Multi-Party Private Set Intersection) dataset integration display webpage.  <br />
 The goal is to integrate the intersection data of datasets.  <br />
