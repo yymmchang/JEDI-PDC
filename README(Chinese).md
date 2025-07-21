@@ -22,21 +22,20 @@ Upload files 選擇檔案上傳  <br />
 上傳檔案限制: txt  <br />
 
 此處範例上傳2個txt檔案(分別為nameC.txt, nameS.txt)  <br />
-![image](https://user-images.githubusercontent.com/55148438/164232516-e12224c1-20ad-442c-b5f4-007200b4ad67.png)
+![image](https://github.com/yymmchang/JEDI-PDC/blob/master/1753081742986.jpg)
 
 
 ## /upload
 下方有兩個單選框(選項為上傳之檔案)，可選取欲作為Client之檔案  <br />
 -   #file1
 -   #file2
-
-![image](https://user-images.githubusercontent.com/55148438/164232802-9fb197c7-7bd2-4ee3-9422-f5647d4cb03c.png)
+![image](https://github.com/yymmchang/JEDI-PDC/blob/master/1753081843713.jpg)
 <br />
-**sumbit** 按鈕 → 提交資料清理選項  <br />
+**Run JEDI-PDC** 按鈕 → 提交資料清理選項  <br />
 
 
 ## /validate
-查看整合結果  <br />
+查看清理結果  <br />
 EX:
 <table>
     <tr>
@@ -66,4 +65,4 @@ EX:
     </tr>
 </table>
 
-![image](https://user-images.githubusercontent.com/55148438/164233338-05b55960-a5b3-42d5-b57d-362c334df2e1.png](https://github.com/yymmchang/JEDI-PDC/blob/master/1753081685196.jpg)
+![image](https://github.com/yymmchang/JEDI-PDC/blob/master/1753081685196.jpg)
