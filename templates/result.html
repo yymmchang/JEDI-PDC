@@ -1,32 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/
-                bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>File Upload Result</title>
 </head>
-
 <body>
-    <div class="container">
-        <div class="header">
-            <h3 class="text-muted">Uploaded files</h3>
-        </div>
-        <hr/>
-        <form action="validate" method="post">
-            <div>
-                The list of the uploaded file(s)
-                <ul>
-                    {% for file in filenames %}
-                    <li>
-                        <input type="radio" name="file" value="{{file}}">
-                        <a href="{{url_for('uploaded_file',filename=file)}}">{{file}}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <input type="submit" value="submit" class="span2">
-            </div>
-        </form>
-    </div>
+    <h2>Upload Success</h2>
+    <p>You uploaded the following two files:</p>
+    <form action="{{ url_for('validate') }}" method="post">
+        {% for filename in filenames %}
+            <input type="radio" name="client" value="{{ filename.replace('.txt', '') }}" required>
+            <strong>{{ filename }}</strong> (select as Client)<br>
+            <input type="hidden" name="file" value="{{ filename }}">
+        {% endfor %}
+        <br>
+        <input type="submit" value="Run JEDI-PDC Comparison">
+    </form>
 </body>
-
 </html>

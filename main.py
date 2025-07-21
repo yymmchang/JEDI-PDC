@@ -1,6 +1,4 @@
-from distutils import debug
-from unicodedata import name
-from xml.dom.expatbuilder import InternalSubsetExtractor
+# main.py (整合後)
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
@@ -10,16 +8,13 @@ import hashlib
 from GBF import gbf_gen, BF, hashs, size
 from PPDI import gbf_merge, compare, verify
 
-
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['txt'])
-UPLOAD_FOLDER = UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))
+ALLOWED_EXTENSIONS = {'txt'}
+UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
-
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 pk, sk = paillier.generate_paillier_keypair()
-filenamesss = []
 files = {}
 ma = {}
 aa = {}
@@ -28,148 +23,107 @@ c = {}
 mergegbf = [0] * size
 mergec = [0] * size
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def import_data(filename):
-    f = open(filename, 'r')
-    r = f.readlines()
-    f.close()
-    return r
+    with open(filename, 'r') as f:
+        return f.readlines()
 
+def get_prefixes(label):
+    return [label[:i] for i in range(1, len(label)+1)]
 
-def preprocess(filename):
-    print(f'preprocess___{filename}')
-    tmp = []
-    tmp1 = []
-    for i in files[filename]:
-        tmp.append(i.strip().split(',')[0])
-        tmp1.append(i.strip().split(',')[1])
+def flip_last_bit(s):
+    if s[-1] == '0':
+        return s[:-1] + '1'
+    else:
+        return s[:-1] + '0'
+
+def preprocess(filename, cname):
+    tmp, tmp1 = [], []
+    for line in files[filename]:
+        x, label = line.strip().split(',')
+        prefixes = get_prefixes(label)
+        if filename == cname:
+            for p in prefixes:
+                tmp.append(f"{x}||{p}")
+        else:
+            for p in prefixes:
+                tmp.append(f"{x}||{flip_last_bit(p)}")
+        tmp1.extend([label]*len(prefixes))
     ma[filename] = tmp
     aa[filename] = tmp1
-    gbf1, c1 = gbf_gen(ma[filename], pk)
+    gbf1, c1 = gbf_gen(tmp, pk)
     gbf[filename] = gbf1
     c[filename] = c1
 
-
-def checkans(dec_message, cname):
-    ans_verify = 0
-    namec = cname
-    for i in range(len(ma[namec])):
-        data = ma[namec][i]
-        data1 = data.encode('utf-8')
-        ans_verify += int(hashlib.md5(data1).hexdigest(), 16)
-    #print(f'ans_verify: {ans_verify}')
-    if ans_verify == dec_message//len(filenamesss):
-        #print('Verify result: Succeed')
-        return 'Verify result: Succeed'
-    else:
-        #print('Verify result: Failed')
-        return 'Verify result: Failed'
-
-
-def PPDImain(cname):
+def PPDImain(cname, sender_name):
     global mergegbf, mergec
-    for i in range(len(filenamesss)):
-        tmp = filenamesss[i]
-        mergegbf, mergec = gbf_merge(mergegbf, gbf[tmp], mergec, c[tmp])
-    global comparec
-    comparec = compare(mergec, c[cname])  # (,bf)
-    enc_massage = verify(mergegbf, comparec)
-    dec_message = sk.decrypt(enc_massage)
-    # print('dec_message::',dec_message)
-    check_ans = checkans(dec_message, cname)
-    return check_ans
+    mergegbf, mergec = gbf_merge(gbf[sender_name], gbf[cname], c[sender_name], c[cname])
+    comparec = compare(mergec, c[cname])
+    enc_message = verify(mergegbf, comparec)
+    dec_message = sk.decrypt(enc_message)
+    return comparec
 
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
-def checkintersection():
+def checkintersection(comparec, cname):
     intersection = []
-    for data in ma[filenamesss[0]]:
+    for data in ma[cname]:
         data1 = data.encode('utf-8')
-        check = 0
-        for hash_func in hashs:
-            idx = int(hash_func(data1).hexdigest(), 16) % size
-            if comparec[idx] == 0:
-                check += 1
-                break
-        if check == 0:
-            intersection.append(data)
-    print(f'intersection: {intersection}')
-    return intersection
-
+        if all(comparec[int(hash_func(data1).hexdigest(), 16) % size] == 1 for hash_func in hashs):
+            intersection.append(data.split('||')[0])
+    return list(set(intersection))
 
 @app.route('/')
 def index():
-    return render_template('index.html', template_folder='./')
-
+    return render_template('index.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    tmp = []
     filenames = []
-    global filenamesss
-    filenamesss = []
-    global files
-    files = {}
-    global ma
-    ma = {}
-    global aa
-    aa = {}
-    global gbf
-    gbf = {}
-    global c
-    c = {}
-    global mergegbf
-    mergegbf = [0] * size
-    global mergec
-    mergec = [0] * size
-
     if request.method == 'POST':
         uploaded_files = request.files.getlist("file[]")
-        tmp = uploaded_files
+        if len(uploaded_files) != 2:
+            return "Please upload exactly two files."
+        for file in uploaded_files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filenames.append(filename)
+        return render_template('result.html', filenames=filenames)
+    return render_template('index.html')
 
-    for file in tmp:
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            filenames.append(filename)
-            tmp_filename = filename.replace('.txt', '')
-            filenamesss.append(tmp_filename)
-            data = import_data(filename)
-            files[tmp_filename] = data
-            preprocess(tmp_filename)
-    return render_template('result.html', filenames=filenames)
-
-
-@app.route('/upload/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-
-@app.route('/validate', methods=["POST"])
+@app.route('/validate', methods=['POST'])
 def validate():
-    #print('validate: ',request.form.getlist('file'))
-    cname = request.form.getlist('file')[0].replace('.txt', '')
-    # filenamesss.remove(cname)
+    filenames = request.form.getlist('file')
+    client_name = request.form.get('client')
+    if len(filenames) != 2 or not client_name:
+        return "Error: Two files and one client must be selected."
 
-    check_ans = PPDImain(cname)
-    print(f'check_ans: {check_ans}')
-    intersection = checkintersection()
+    fname1, fname2 = filenames[0].replace('.txt', ''), filenames[1].replace('.txt', '')
+    sender_name = fname2 if client_name == fname1 else fname1
+
+    for fname in [client_name, sender_name]:
+        files[fname] = import_data(fname + '.txt')
+        preprocess(fname, client_name)
+
+    comparec = PPDImain(client_name, sender_name)
+    intersection = checkintersection(comparec, client_name)
 
     final_ans = {}
-    #print(f'aa: {aa}')
-    for k in intersection:
-        tmp = []
-        for i in range(len(filenamesss)):
-            idx = ma[filenamesss[i]].index(k)
-            tmp.append(aa[filenamesss[i]][idx])
-        final_ans[k] = tmp
-    print(f'{final_ans}')
-    return render_template('validate.html', final_ans=final_ans, filenames=filenamesss)
+    for x in intersection:
+        label_map = {}
+        label_set = set()
+        for fname in [client_name, sender_name]:
+            for j, data in enumerate(ma[fname]):
+                if data.startswith(f"{x}||"):
+                    label = aa[fname][j]
+                    label_map[fname] = label
+                    label_set.add(label)
+                    break
+        if len(label_set) > 1:
+            final_ans[x] = label_map
 
+    return render_template('validate.html', final_ans=final_ans, filenames=[sender_name, client_name])
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
