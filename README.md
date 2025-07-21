@@ -36,6 +36,8 @@ Uploaded files / View uploaded files <br />
 There are two radio buttons below (the option is the uploaded file), you can select the file to be used as a client  <br />
 -   #file1
 -   #file2
+
+
 ![image](https://github.com/yymmchang/JEDI-PDC/blob/master/1753081843713.jpg)
 <br />
 **Run JEDI-PDC** button → Submit data cleaning option  <br />
